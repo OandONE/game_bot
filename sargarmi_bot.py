@@ -10,7 +10,7 @@ except:
     os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.4.tar.gz && pip install httpx translate jdatetime pytz")
 import json,random,traceback,time
 from datetime import datetime
-bot=Client("bot_sargarmi_",token="BEEAI0ARZKMUKOAGQBHVHPMZNRDPLZUUOBXAIQCUERTPZZNMZPIUVVCLQJLIOPDR")
+bot=Client("bot_sargarmi_")
 CHAT_ID_owner="b0I16Wj0DsM070da28fbfaba3a23ab84" # چت آیدی خود را وارد کنید
 help_robot="""🎮 راهنمای سرگرمی ربات
 
