@@ -1,17 +1,24 @@
 # نویسنده سورس : سید محمد حسین موسوی رجا
 # روبیکا : @O_and_ONE_01
 # تلگرام : @Hacker123457890
+# چنل روبیکا : @Fast_Rub
 try:
     from fast_rub import Client,Update,filters
     import httpx,jdatetime,pytz
     from translate import Translator
 except:
     import os
-    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.4.tar.gz && pip install httpx translate jdatetime pytz")
+    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.5.tar.gz && pip install httpx translate jdatetime pytz")
 import json,random,traceback,time
 from datetime import datetime
-bot=Client("bot_sargarmi_")
-CHAT_ID_owner="b0I16Wj0DsM070da28fbfaba3a23ab84" # چت آیدی خود را وارد کنید
+try:
+    from fast_rub import __version__
+    if not __version__=="0.5":
+        os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.5.tar.gz")
+except:
+    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.5.tar.gz")
+bot=Client("bot_sargarmi")
+CHAT_ID_owner="b0IS2Uw0DAc04aa76508d5d7640fa51f" # چت آیدی خود را وارد کنید
 help_robot="""🎮 راهنمای سرگرمی ربات
 
 🔵 جوک - /jok
@@ -145,46 +152,49 @@ class game:
         if guid in scores:
             l_=["1","2","3","4","5","6","زوج","فرد"]
             if shart in l_:
-                if self.mojodi(guid)>=price:
-                    random.seed(random.randint(0,500))
-                    ra_shart=random.randint(1,6)
-                    if shart in l_[:6]:
-                        if int(shart)==ra_shart:
-                            last_m=scores[guid]
-                            scores[guid]+=price*6
-                            save_file("scores.json",scores)
-                            return {"type":True,"s":True,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
+                if price>0:
+                    if self.mojodi(guid)>=price:
+                        random.seed(random.randint(0,500))
+                        ra_shart=random.randint(1,6)
+                        if shart in l_[:6]:
+                            if int(shart)==ra_shart:
+                                last_m=scores[guid]
+                                scores[guid]+=price*6
+                                save_file("scores.json",scores)
+                                return {"type":True,"s":True,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
+                            else:
+                                last_m=scores[guid]
+                                scores[guid]-=price
+                                save_file("scores.json",scores)
+                                return {"type":True,"s":False,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
                         else:
-                            last_m=scores[guid]
-                            scores[guid]-=price
-                            save_file("scores.json",scores)
-                            return {"type":True,"s":False,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
+                            zoj=["2","4","6"]
+                            if shart=="زوج":
+                                if str(ra_shart) in zoj:
+                                    last_m=scores[guid]
+                                    scores[guid]+=price
+                                    save_file("scores.json",scores)
+                                    return {"type":True,"s":True,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
+                                else:
+                                    last_m=scores[guid]
+                                    scores[guid]-=price
+                                    save_file("scores.json",scores)
+                                    return {"type":True,"s":False,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
+                            else:
+                                if not (str(ra_shart) in zoj):
+                                    last_m=scores[guid]
+                                    scores[guid]+=price
+                                    save_file("scores.json",scores)
+                                    return {"type":True,"s":True,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
+                                else:
+                                    last_m=scores[guid]
+                                    scores[guid]-=price
+                                    save_file("scores.json",scores)
+                                    return {"type":True,"s":False,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
                     else:
-                        zoj=["2","4","6"]
-                        if shart=="زوج":
-                            if str(ra_shart) in zoj:
-                                last_m=scores[guid]
-                                scores[guid]+=price
-                                save_file("scores.json",scores)
-                                return {"type":True,"s":True,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
-                            else:
-                                last_m=scores[guid]
-                                scores[guid]-=price
-                                save_file("scores.json",scores)
-                                return {"type":True,"s":False,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
-                        else:
-                            if not (str(ra_shart) in zoj):
-                                last_m=scores[guid]
-                                scores[guid]+=price
-                                save_file("scores.json",scores)
-                                return {"type":True,"s":True,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
-                            else:
-                                last_m=scores[guid]
-                                scores[guid]-=price
-                                save_file("scores.json",scores)
-                                return {"type":True,"s":False,"mo":self.mojodi(guid),"la":last_m,"sh":str(ra_shart)}
+                        return {"type":False,"s":"m"}
                 else:
-                    return {"type":False,"s":"m"}
+                    return {"type":False,"s":"manfi"}
             else:
                 return {"type":False,"s":"i"}
         else:
@@ -215,13 +225,32 @@ class game:
             else:
                 scores[guid]=50000
                 save_file("scores.json",scores)
-                game().j_miner(guid)
+                return game().j_miner(guid)
         else:
             miner[guid]={"level":1,"time":int(time.time())}
             save_file("miner.json",miner)
             return game().j_miner(guid)
-
-dass={"help":"راهنما کامل",'jok':"جوک",'danestani':"دانستنی","poem":"شعر","bio":"بیو","fal":"فال","date":"تاریخ",'courage':'جرات','truth':'حقیقت','news':'اخبار',"font {text}":"فونت انگلیسی","aboutbirth {date}":"اطلاعات تاریخ تولد","calculator {calcu}":"ماشین حساب","weater {name_city}":"آب و هوا","music {name_music}":"جستجو موزیک","number {number}":"عدد","translate {text}":"ترجمه","about_me":"اطلاعات من","موجودی":"","گردونه":"","شرط بندی {مثدار شرط} {شرط}":"","ماینر":"","خرید ماینر":"","خرید حداکثر ماینر":""}
+    def buy_miner(self,guid):
+        if guid in miner:
+            if guid in scores:
+                next_miner_p=(miner[guid]['level']+1) *  1758
+                if next_miner_p>self.mojodi(guid):
+                    return {"buy":False,"m":self.mojodi(guid),"n_miner":next_miner_p,"m_miner":(self.my_miner(guid))['level']}
+                else:
+                    scores[guid]-=next_miner_p
+                    miner[guid]['level']+=1
+                    save_file("miner.json",miner)
+                    save_file("scores.json",scores)
+                    return {"buy":True,"m":self.mojodi(guid),"m_miner":(self.my_miner(guid))['level']}
+            else:
+                scores[guid]=50000
+                save_file("scores.json",scores)
+                return game().buy_miner(guid)
+        else:
+            miner[guid]={"level":1,"time":int(time.time())}
+            save_file("miner.json",miner)
+            return game().buy_miner(guid)
+dass={"help":"راهنما کامل",'jok':"جوک",'danestani':"دانستنی","poem":"شعر","bio":"بیو","fal":"فال","date":"تاریخ",'courage':'جرات','truth':'حقیقت','news':'اخبار',"font {text}":"فونت انگلیسی","aboutbirth {date}":"اطلاعات تاریخ تولد","calculator {calcu}":"ماشین حساب","weater {name_city}":"آب و هوا","music {name_music}":"جستجو موزیک","number {number}":"عدد","translate {text}":"ترجمه","about_me":"اطلاعات من","موجودی":"","گردونه":"","شرط بندی {مقدار شرط} {شرط}":"","ماینر":"","جمع ماینر":"","خرید ماینر":"","خرید حداکثر ماینر":""}
 @bot.on_message_updates(filters=filters.is_user())
 async def main(message:Update):
     TEXT_MESSAGE=message.text
@@ -390,6 +419,8 @@ async def main(message:Update):
                 if s_['s']=="m":
                     await message.reply(f"""خطا موجودی شما کافی نیست !
 موجودی شما : {game().mojodi(guid=message.sender_id):,} 🪙""")
+                elif s_['s']=="manfi":
+                    await message.reply("شرط بندی با اعداد منفی رخ نمیدهد.")
                 else:
                     await message.reply("خطا ! شرط نامعتبر")
         except ValueError:
@@ -423,8 +454,37 @@ async def main(message:Update):
         await message.reply(f"""ماینر با موفقیت جمع شد ✅
 مقدار پول جمع شده : {m_j['j']:,} 🪙
 موجودی کنونی شما : {m_j['m']:,} 🪙""")
-        
+    elif TEXT_MESSAGE in ['خرید ماینر','ارتقا ماینر']:
+        m=game().buy_miner(message.sender_id)
+        if m['buy']:
+            await message.reply(f"""ماینر با موفقیت خریداری شد ✅
+موجودی کنونی شما : {m['m']:,} 🪙""")
+        else:
+            await message.reply(f"""خطا ! موجودی شما برای خرید لول بعدی ماینر کافی نیست !
+قیمت ماینر لول بعدی : {m['n_miner']:,} 🎟
+موجودی شما : {m['m']:,} 🪙""")
+    elif TEXT_MESSAGE=="خرید حداکثر ماینر":
+        buying=True
+        buyed=0
+        while buying:
+            m=game().buy_miner(message.sender_id)
+            if m['buy']:
+                last_={"m":m['m'],"m_miner":m['m_miner']}
+                buyed+=1
+            else:
+                if buyed==0:
+                    await message.reply(f"""خطا ! موجودی شما برای خرید لول بعدی ماینر کافی نیست !
+قیمت ماینر لول بعدی : {m['n_miner']:,} 🎟
+موجودی شما : {m['m']:,} 🪙""")
+                else:
+                    await message.reply(f"""حداکثر ماینر با موفقیت خریداری شد ✅
+موجودی کنونی شما : {last_['m']:,} 🪙
+لول ماینر شما : {last_['m_miner']:,}
+تعداد ماینر های خریداری شده : {buyed:,}""")
+                return None
+
 bot.run()
 # نویسنده سورس : سید محمد حسین موسوی رجا
 # روبیکا : @O_and_ONE_01
 # تلگرام : @Hacker123457890
+# چنل روبیکا : @Fast_Rub
