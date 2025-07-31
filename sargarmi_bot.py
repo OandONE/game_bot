@@ -8,15 +8,15 @@ try:
     from translate import Translator
 except:
     import os
-    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.5.tar.gz && pip install httpx translate jdatetime pytz")
+    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.7.tar.gz && pip install httpx translate jdatetime pytz")
 import json,random,traceback,time
 from datetime import datetime
 try:
     from fast_rub import __version__
-    if not __version__=="0.5":
-        os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.5.tar.gz")
+    if not __version__=="0.7":
+        os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.7.tar.gz")
 except:
-    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.5.tar.gz")
+    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.7.tar.gz")
 bot=Client("bot_sargarmi")
 CHAT_ID_owner="b0IS2Uw0DAc04aa76508d5d7640fa51f" # چت آیدی خود را وارد کنید
 help_robot="""🎮 راهنمای سرگرمی ربات
