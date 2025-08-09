@@ -8,15 +8,15 @@ try:
     from translate import Translator
 except:
     import os
-    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.7.tar.gz && pip install httpx translate jdatetime pytz")
+    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.8.tar.gz && pip install httpx translate jdatetime pytz")
 import json,random,traceback,time
 from datetime import datetime
 try:
     from fast_rub import __version__
-    if not __version__=="0.7":
-        os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.7.tar.gz")
+    if not __version__=="0.8":
+        os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.8.tar.gz")
 except:
-    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.7.tar.gz")
+    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.8.tar.gz")
 bot=Client("bot_sargarmi")
 CHAT_ID_owner="b0IS2Uw0DAc04aa76508d5d7640fa51f" # چت آیدی خود را وارد کنید
 help_robot="""🎮 راهنمای سرگرمی ربات
@@ -268,7 +268,7 @@ async def main(message:Update):
     for com,ds in dass.items():
         if u==10:
             break
-        bot.add_commands(com,ds)
+        await bot.add_commands(com,ds)
         u+=1
     y=await bot.set_commands()
     await bot.delete_commands()
@@ -488,3 +488,4 @@ bot.run()
 # روبیکا : @O_and_ONE_01
 # تلگرام : @Hacker123457890
 # چنل روبیکا : @Fast_Rub
+
