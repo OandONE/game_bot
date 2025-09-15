@@ -4,19 +4,14 @@
 # چنل روبیکا : @Fast_Rub
 try:
     from fast_rub import Client,Update,filters
+    from fast_rub.iniline import KeyPad
     import httpx,jdatetime,pytz
     from translate import Translator
 except:
     import os
-    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.8.tar.gz && pip install httpx translate jdatetime pytz")
+    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-1.3.tar.gz && pip install httpx translate jdatetime pytz")
 import json,random,traceback,time
 from datetime import datetime
-try:
-    from fast_rub import __version__
-    if not __version__=="0.8":
-        os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.8.tar.gz")
-except:
-    os.system("pip install pip install --no-deps https://parssource.ir/fast_rub/fast_rub-0.8.tar.gz")
 bot=Client("bot_sargarmi")
 CHAT_ID_owner="b0IS2Uw0DAc04aa76508d5d7640fa51f" # چت آیدی خود را وارد کنید
 help_robot="""🎮 راهنمای سرگرمی ربات
@@ -97,20 +92,26 @@ def translate_text_f(input_lang, output_lang, text):
     from_lang=input_lang, to_lang=output_lang)
     translation = translator.translate(text)
     return translation
-def open_file(name_file):
+def open_file(name_file,type_file="dict"):
     try:
         with open(name_file,"r",encoding="utf-8") as file:
             return json.load(file)
     except:
-        with open(name_file,"w",encoding="utf-8") as file:
-            file.write("{}")
-        return {}
+        if type_file=="dict":
+            with open(name_file,"w",encoding="utf-8") as file:
+                file.write("{}")
+            return {}
+        else:
+            with open(name_file,"w",encoding="utf-8") as file:
+                file.write("[]")
+            return []
 def save_file(name_file,data):
     with open(name_file,"w",encoding="utf-8") as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 scores=open_file("scores.json")
 gardon_users=open_file("gardon.json")
 miner=open_file("miner.json")
+list_bans=open_file("list_bans.json",type_file="list")
 class game:
     def __init__(self):
         pass
@@ -251,10 +252,20 @@ class game:
             save_file("miner.json",miner)
             return game().buy_miner(guid)
 dass={"help":"راهنما کامل",'jok':"جوک",'danestani':"دانستنی","poem":"شعر","bio":"بیو","fal":"فال","date":"تاریخ",'courage':'جرات','truth':'حقیقت','news':'اخبار',"font {text}":"فونت انگلیسی","aboutbirth {date}":"اطلاعات تاریخ تولد","calculator {calcu}":"ماشین حساب","weater {name_city}":"آب و هوا","music {name_music}":"جستجو موزیک","number {number}":"عدد","translate {text}":"ترجمه","about_me":"اطلاعات من","موجودی":"","گردونه":"","شرط بندی {مقدار شرط} {شرط}":"","ماینر":"","جمع ماینر":"","خرید ماینر":"","خرید حداکثر ماینر":""}
-@bot.on_message_updates(filters=filters.is_user())
+@bot.on_message(filters=filters.is_user())
 async def main(message:Update):
     TEXT_MESSAGE=message.text
     CHAT_ID=message.chat_id
+    GUID=message.sender_id
+    if (GUID in list_bans) or (CHAT_ID in list_bans):
+        await bot.send_text(f"""✉️ پیام جدید از لیست ممنوعه ❌ :
+{str(message)}""",CHAT_ID_owner)
+        return None
+    if CHAT_ID==CHAT_ID_owner and TEXT_MESSAGE.startswith("بن "):
+        c_g=TEXT_MESSAGE.replace("بن ","")
+        list_bans.append(c_g)
+        save_file("list_bans.json",list_bans)
+        await message.reply("کاربر با موفقیت بن شد ❌")
     if TEXT_MESSAGE in ['اطلاعات من',"/about_me"]:
         about_user=await bot.get_chat(CHAT_ID)
         await message.reply(f"""چت آیدی » {CHAT_ID}
@@ -273,13 +284,13 @@ async def main(message:Update):
     y=await bot.set_commands()
     await bot.delete_commands()
     if TEXT_MESSAGE in ['راهنما',"دستورات","/help"]:
+        buttuns=KeyPad()
         for com,ds in dass.items():
             if detect_language(com)=="fa":
-                await bot.add_listkeypad("100","Simple",com)
+                buttuns.add_1row("100",com)
             else:
-                await bot.add_listkeypad("100","Simple","/"+com)
-        await bot.send_message_keypad(CHAT_ID,help_robot,reply_to_message_id=message.message_id)
-        await bot.delete_listkeypad()
+                buttuns.add_1row("100","/"+com)
+        await message.reply(help_robot,buttuns.get())
     elif TEXT_MESSAGE in ['ربات','/start']:
         await message.reply("جونم؟")
     elif TEXT_MESSAGE in ['جوک','جک','/jok']:
@@ -488,4 +499,3 @@ bot.run()
 # روبیکا : @O_and_ONE_01
 # تلگرام : @Hacker123457890
 # چنل روبیکا : @Fast_Rub
-
